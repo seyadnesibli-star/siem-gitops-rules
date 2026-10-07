@@ -1,0 +1,17 @@
+title: QRadar Registry Run Keys Persistence Modification
+id: q-1008-registry-run
+status: experimental
+description: Detects registry modifications to Run/RunOnce keys pointing to suspicious interpreters.
+logsource:
+  product: qradar
+  service: sysmon
+detection:
+  selection:
+    EventID: 13
+    TargetObject: "*\\CurrentVersion\\Run*"
+    Details: "*powershell*"
+  condition: selection
+level: high
+tags:
+  - attack.persistence
+  - attack.t1547.001
