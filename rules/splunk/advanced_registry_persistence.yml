@@ -1,0 +1,31 @@
+title: Advanced Registry Run Keys Persistence Modification
+id: e4f5a6b7-c8d9-0123-efab-123456789014
+status: experimental
+description: Detects modifications to Windows Registry Run/RunOnce keys associated with suspicious script execution or binary paths.
+references:
+  - https://attack.mitre.org/techniques/T1547/001/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_event:
+    EventCode: 13
+  selection_key:
+    TargetObject|contains:
+      - '\CurrentVersion\Run'
+      - '\CurrentVersion\RunOnce'
+  selection_suspicious_val:
+    Details|contains:
+      - 'powershell'
+      - 'cmd.exe'
+      - 'mshta'
+      - 'rundll32'
+      - '\Temp\\'
+  condition: selection_event and selection_key and selection_suspicious_val
+falsepositives:
+  - Legitimate software setup wizards updating system startup properties
+level: high
+tags:
+  - attack.persistence
+  - attack.t1547.001
