@@ -1,0 +1,16 @@
+title: QRadar Suspicious WMI Provider Host Command Execution
+id: q-1007-wmi-lateral
+status: experimental
+description: Detects WmiPrvSE spawning command shells indicative of lateral movement.
+logsource:
+  product: qradar
+  service: sysmon
+detection:
+  selection:
+    ParentImage: "*\\WmiPrvSE.exe"
+    Image: "*\\cmd.exe"
+  condition: selection
+level: high
+tags:
+  - attack.execution
+  - attack.t1047
