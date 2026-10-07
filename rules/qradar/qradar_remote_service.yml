@@ -1,0 +1,17 @@
+title: QRadar Remote Windows Service Creation via SC
+id: q-1010-remote-sc
+status: experimental
+description: Detects service creation targeting remote assets for lateral movement.
+logsource:
+  product: qradar
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image: "*\\sc.exe"
+    CommandLine: "*\\\\* AND *create*"
+  condition: selection
+level: high
+tags:
+  - attack.lateral_movement
+  - attack.t1543.003
