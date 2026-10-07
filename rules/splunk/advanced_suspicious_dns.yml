@@ -1,0 +1,22 @@
+title: Suspicious High Entropy DNS Query Patterns
+id: b3c4d5e6-f7a8-9012-cdef-123456789023
+status: experimental
+description: Detects anomalous high-entropy or unusually long DNS queries that might indicate Domain Generation Algorithms (DGA) or C2 tunneling.
+references:
+  - https://attack.mitre.org/techniques/T1568/002/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_dns:
+    EventCode: 22
+  selection_length:
+    QueryName|length: 30
+  condition: selection_dns and selection_length
+falsepositives:
+  - Complex enterprise internal domain names or content delivery networks
+level: medium
+tags:
+  - attack.command_and_control
+  - attack.t1568.002
