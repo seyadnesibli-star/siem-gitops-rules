@@ -1,0 +1,28 @@
+title: Windows Firewall Tampering via Netsh
+id: a2b3c4d5-e6f7-8901-bcde-123456789022
+status: experimental
+description: Detects attempts to disable or modify Windows Firewall rules using the netsh utility to facilitate network communication.
+references:
+  - https://attack.mitre.org/techniques/T1562/004/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_process:
+    EventCode: 1
+  selection_image:
+    Image|endswith: '\netsh.exe'
+  selection_args:
+    CommandLine|contains:
+      - 'firewall'
+      - 'advfirewall'
+      - 'set state off'
+      - 'disable'
+  condition: selection_process and selection_image and selection_args
+falsepositives:
+  - Authorized software installation modifying network profiles
+level: high
+tags:
+  - attack.defense_evasion
+  - attack.t1562.004
