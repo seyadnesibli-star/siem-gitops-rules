@@ -1,0 +1,18 @@
+title: Suspicious Windows Service Creation
+id: c2b3a4d5-e6f7-8901-bcde-f12345678901
+status: experimental
+description: Detects creation of new services pointing to unusual executables or command lines (Persistence indicator).
+logsource:
+  product: splunk
+  service: windows_services
+detection:
+  selection:
+    EventCode: 4697
+    ImagePath|contains:
+      - '\Temp\'
+      - '\AppData\Local\Temp\'
+      - 'C:\Users\Public\'
+  condition: selection
+falsepositives:
+  - Third-party software installers
+level: high
