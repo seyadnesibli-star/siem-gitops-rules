@@ -1,0 +1,18 @@
+title: Potential Process Injection via CreateRemoteThread
+id: d3e4f5a6-b7c8-9012-defa-123456789012
+status: experimental
+description: Detects potential process injection activity where a process creates a remote thread in another process.
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection:
+    EventCode: 8
+    TargetImage|endswith:
+      - '\lsass.exe'
+      - '\csrss.exe'
+      - '\svchost.exe'
+  condition: selection
+falsepositives:
+  - Legitimate security software or debugging tools
+level: high
