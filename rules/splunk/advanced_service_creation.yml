@@ -1,0 +1,27 @@
+title: Suspicious Service Creation via Command Line
+id: c2b3a4d5-e6f7-8901-bcde-f12345678902
+status: experimental
+description: Detects the creation of Windows services pointing to suspicious interpreters or temporary directories indicating potential persistence or lateral movement.
+references:
+  - https://attack.mitre.org/techniques/T1543/003/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: windows_services
+detection:
+  selection_event:
+    EventCode: 4697
+  selection_paths:
+    ImagePath|contains:
+      - '\Temp\'
+      - '\AppData\Local\Temp\'
+      - 'C:\Users\Public\'
+      - 'powershell.exe'
+      - 'cmd.exe /c'
+  condition: selection_event and selection_paths
+falsepositives:
+  - Legitimate third-party software installations
+level: high
+tags:
+  - attack.persistence
+  - attack.t1543.003
