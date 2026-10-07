@@ -1,0 +1,16 @@
+title: QRadar Advanced Suspicious PowerShell Download and Execution
+id: q-1001-powershell-exec
+status: experimental
+description: Detects QRadar offense patterns related to obfuscated PowerShell download cradles.
+logsource:
+  product: qradar
+  service: win-security
+detection:
+  selection:
+    eventName: "PowerShell Script Block Logging"
+    payload: "*FromBase64String* AND *DownloadString*"
+  condition: selection
+level: high
+tags:
+  - attack.execution
+  - attack.t1059.001
