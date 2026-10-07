@@ -1,0 +1,24 @@
+title: Local User Account Creation and Administrators Group Addition
+id: d9e0f1a2-b3c4-5678-efab-123456789019
+status: experimental
+description: Detects creation of a new local user account followed by immediate addition to the local Administrators group.
+references:
+  - https://attack.mitre.org/techniques/T1136/001/
+  - https://attack.mitre.org/techniques/T1098/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: security
+detection:
+  selection_creation:
+    EventCode: 4720
+  selection_group:
+    EventCode: 4732
+  condition: selection_creation or selection_group
+falsepositives:
+  - Authorized system administrator actions during provisioning
+level: high
+tags:
+  - attack.persistence
+  - attack.privilege_escalation
+  - attack.t1136.001
