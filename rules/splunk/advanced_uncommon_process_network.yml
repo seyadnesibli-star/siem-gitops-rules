@@ -1,0 +1,26 @@
+title: Suspicious Outbound Network Connection by Native System Binary
+id: f5a6b7c8-d9e0-1234-abcd-ef1234567895
+status: experimental
+description: Detects unusual outbound network connections initiated by native Windows utilities often abused for C2 communications or data exfiltration.
+references:
+  - https://attack.mitre.org/techniques/T1105/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_event:
+    EventCode: 3
+  selection_image:
+    Image|endswith:
+      - '\certutil.exe'
+      - '\bitsadmin.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+  condition: selection_event and selection_image
+falsepositives:
+  - Legitimate administrative script downloads or software updates
+level: high
+tags:
+  - attack.command_and_control
+  - attack.t1105
