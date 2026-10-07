@@ -1,0 +1,36 @@
+title: Advanced PowerShell Obfuscated Download and Execution
+id: f5a6b7c8-d9e0-1234-abcd-ef1234567892
+status: experimental
+description: Detects highly suspicious PowerShell executions involving encoded commands, hidden windows, and web download cradles typical of malware staging.
+references:
+  - https://attack.mitre.org/techniques/T1059/001/
+  - https://attack.mitre.org/techniques/T1140/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: powershell
+detection:
+  selection_process:
+    EventCode: 4104
+  selection_keywords:
+    ScriptBlockText|contains:
+      - 'FromBase64String'
+      - 'IEX'
+      - 'Invoke-Expression'
+      - 'DownloadString'
+      - 'Net.WebClient'
+  selection_stealth:
+    ScriptBlockText|contains:
+      - '-enc'
+      - '-e '
+      - '-WindowStyle Hidden'
+      - '-NonInteractive'
+  condition: selection_process and selection_keywords and selection_stealth
+falsepositives:
+  - Legitimate automated deployment scripts by system administrators
+level: high
+tags:
+  - attack.execution
+  - attack.t1059.001
+  - attack.defense_evasion
+  - attack.t1140
