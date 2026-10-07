@@ -1,0 +1,32 @@
+title: Masquerading Critical System Process Executed from Non-Standard Path
+id: a6b7c8d9-e0f1-2345-bcde-f12345678916
+status: experimental
+description: Detects execution of critical system executables (like svchost, lsass, explorer) from non-standard directories such as user temp folders.
+references:
+  - https://attack.mitre.org/techniques/T1036/004/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_process:
+    EventCode: 1
+  selection_names:
+    Image|endswith:
+      - '\svchost.exe'
+      - '\lsass.exe'
+      - '\services.exe'
+      - '\smss.exe'
+  selection_paths:
+    Image|contains:
+      - '\Temp\'
+      - '\AppData\Local\Temp\'
+      - '\Users\Public\'
+      - '\Downloads\'
+  condition: selection_process and selection_names and selection_paths
+falsepositives:
+  - Rare custom diagnostic tools or forensic software copies
+level: critical
+tags:
+  - attack.defense_evasion
+  - attack.t1036.004
