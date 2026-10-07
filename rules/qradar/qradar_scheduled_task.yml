@@ -1,0 +1,17 @@
+title: QRadar Suspicious Scheduled Task Creation
+id: q-1005-scheduled-task
+status: experimental
+description: Detects suspicious persistence mechanisms via scheduled tasks invoking command interpreters.
+logsource:
+  product: qradar
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image: "*\\schtasks.exe"
+    CommandLine: "*/create* AND *\\Temp\\*"
+  condition: selection
+level: high
+tags:
+  - attack.persistence
+  - attack.t1053.005
