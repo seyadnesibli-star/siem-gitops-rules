@@ -1,0 +1,27 @@
+title: Suspicious Scheduled Task Export via Schtasks
+id: c4d5e6f7-a8b9-012-defa-123456789024
+status: experimental
+description: Detects dumping or querying of scheduled tasks using schtasks which can be used for reconnaissance of scheduled persistence mechanisms.
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_process:
+    EventCode: 1
+  selection_image:
+    Image|endswith: '\schtasks.exe'
+  selection_args:
+    CommandLine|contains:
+      - '/query'
+      - '/fo'
+      - 'csv'
+  condition: selection_process and selection_image and selection_args
+falsepositives:
+  - Legitimate IT management asset inventory scripts
+level: medium
+tags:
+  - attack.discovery
+  - attack.t1053.005
