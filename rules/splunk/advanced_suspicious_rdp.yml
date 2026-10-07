@@ -1,0 +1,26 @@
+title: Suspicious Remote Desktop Connection Parameters
+id: f1a2b3c4-d5e6-7890-abcd-123456789021
+status: experimental
+description: Detects execution of Remote Desktop connection client with parameters pointing to suspicious configuration files.
+references:
+  - https://attack.mitre.org/techniques/T1021/001/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_process:
+    EventCode: 1
+  selection_image:
+    Image|endswith: '\mstsc.exe'
+  selection_args:
+    CommandLine|contains:
+      - '.rdp'
+      - '/v:'
+  condition: selection_process and selection_image and selection_args
+falsepositives:
+  - Standard user legitimate RDP sessions
+level: medium
+tags:
+  - attack.lateral_movement
+  - attack.t1021.001
