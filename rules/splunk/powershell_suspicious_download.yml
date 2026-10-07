@@ -1,0 +1,18 @@
+title: Suspicious PowerShell Download via Invoke-WebRequest
+id: b1a2c3d4-e5f6-7890-abcd-ef1234567890
+status: experimental
+description: Detects PowerShell downloading files using Invoke-WebRequest or Net.WebClient, common in initial access.
+logsource:
+  product: splunk
+  service: powershell
+detection:
+  selection:
+    CommandLine|contains:
+      - 'Invoke-WebRequest'
+      - 'Net.WebClient'
+      - 'DownloadString'
+      - 'DownloadFile'
+  condition: selection
+falsepositives:
+  - Legitimate administrative scripts
+level: high
