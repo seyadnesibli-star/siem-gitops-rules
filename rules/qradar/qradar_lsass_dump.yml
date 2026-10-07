@@ -1,0 +1,16 @@
+title: QRadar Potential LSASS Credential Dumping
+id: q-1002-lsass-dump
+status: experimental
+description: Detects unauthorized process access to LSASS memory space for credential harvesting.
+logsource:
+  product: qradar
+  service: sysmon
+detection:
+  selection:
+    TargetImage: "*\\lsass.exe"
+    GrantedAccess: "*0x1410*"
+  condition: selection
+level: critical
+tags:
+  - attack.credential_access
+  - attack.t1003.001
