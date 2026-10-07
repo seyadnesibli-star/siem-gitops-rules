@@ -1,0 +1,32 @@
+title: Advanced Process Injection via CreateRemoteThread
+id: d3e4f5a6-b7c8-9012-defa-123456789013
+status: experimental
+description: Detects cross-process memory injection into critical Windows system processes using suspicious remote thread creation APIs.
+references:
+  - https://attack.mitre.org/techniques/T1055/002/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_code:
+    EventCode: 8
+  selection_target:
+    TargetImage|endswith:
+      - '\lsass.exe'
+      - '\csrss.exe'
+      - '\svchost.exe'
+      - '\explorer.exe'
+  selection_source:
+    SourceImage|contains:
+      - '\Temp\'
+      - '\Users\Public\'
+      - '\\Device\\HarddiskVolume'
+  condition: selection_code and selection_target and selection_source
+falsepositives:
+  - Legitimate administrative debugging or security monitoring utilities
+level: high
+tags:
+  - attack.defense_evasion
+  - attack.privilege_escalation
+  - attack.t1055.002
