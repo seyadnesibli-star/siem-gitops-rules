@@ -1,0 +1,26 @@
+title: Suspicious WMI Provider Host Spawning Command Shell
+id: b7c8d9e0-f1a2-3456-cdef-123456789017
+status: experimental
+description: Detects WMI provider host (WmiPrvSE.exe) spawning a command interpreter, indicating potential lateral movement or remote code execution.
+references:
+  - https://attack.mitre.org/techniques/T1047/
+author: Advanced SOC Engineering
+logsource:
+  product: splunk
+  service: sysmon
+detection:
+  selection_parent:
+    ParentImage|endswith: '\WmiPrvSE.exe'
+  selection_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\cscript.exe'
+      - '\wscript.exe'
+  condition: selection_parent and selection_child
+falsepositives:
+  - Legitimate remote administration scripts utilizing WMI
+level: high
+tags:
+  - attack.execution
+  - attack.t1047
