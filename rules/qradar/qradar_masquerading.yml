@@ -1,0 +1,16 @@
+title: QRadar Masquerading System Process Execution
+id: q-1006-masquerading
+status: experimental
+description: Detects critical system binaries running from non-standard directories like user temp paths.
+logsource:
+  product: qradar
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image: "*\\Temp\\svchost.exe"
+  condition: selection
+level: critical
+tags:
+  - attack.defense_evasion
+  - attack.t1036.004
