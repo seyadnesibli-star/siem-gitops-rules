@@ -1,0 +1,14 @@
+title: Excessive Failed Login Attempts
+id: 1a2b3c4d-5678-90ab-cdef-1234567890ab
+status: experimental
+description: Detects multiple failed login attempts indicating potential brute-force attack
+logsource:
+  product: splunk
+  service: authentication
+detection:
+  selection:
+    action: 'failed_login'
+  condition: selection | count() > 5
+falsepositives:
+  - Administrator error
+level: high
