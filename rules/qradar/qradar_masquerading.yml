@@ -1,4 +1,4 @@
-title: QRadar Masquerading System Process Execution
+title: QRadar Masquerading System Process Execution v2
 id: q-1006-masquerading
 status: experimental
 description: Detects critical system binaries running from non-standard directories like user temp paths.
